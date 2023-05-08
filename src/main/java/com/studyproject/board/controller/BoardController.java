@@ -77,7 +77,7 @@ public class BoardController {
     }
 
     //페이지
-    @GetMapping("/paging/")
+    @GetMapping("/paging")
     public String paging(@PageableDefault(page = 1)Pageable pageable, Model model){
         //pageable.getPageNumber();
         Page<BoardDTO> boardList = boardService.paging(pageable);
