@@ -1,8 +1,10 @@
 package com.studyproject.board.post;
+import com.studyproject.board.dto.SearchDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,8 +35,8 @@ public class PostController {
     }
 
     @GetMapping("/board/page")
-    public String openPostList(Model model) {
-        List<PostResponse> posts = postService.findAllPost();
+    public String openPostList(@ModelAttribute("params") final SearchDTO params, Model model) {
+        List<PostResponse> posts = postService.findAllPost(params);
         model.addAttribute("posts", posts);
         return "paging";
     }

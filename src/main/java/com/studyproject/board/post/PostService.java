@@ -1,5 +1,6 @@
 package com.studyproject.board.post;
 
+import com.studyproject.board.dto.SearchDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,9 @@ public class PostService {
      * 게시글 리스트 조회
      * @return 게시글 리스트
      */
-    public List<PostResponse> findAllPost() {
+    public List<PostResponse> findAllPost(final SearchDTO params) {
 
-        return postMapper.findAll();
+        return postMapper.findAll(params);
     }
 
 }

@@ -20,7 +20,7 @@
 
     <!-- 게시글 저장 -->
     <insert id="save" parameterType="com.studyproject.board.post.PostRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO tb_post (
+        INSERT INTO board_table (
         <include refid="postColumns" />
         ) VALUES (
         #{id}
@@ -37,7 +37,7 @@
         SELECT
         <include refid="postColumns" />
         FROM
-        tb_post
+        board_table
         WHERE
         id = #{value}
     </select>
@@ -45,7 +45,7 @@
 
     <!-- 게시글 수정 -->
     <update id="update" parameterType="com.studyproject.board.post.PostRequest">
-        UPDATE tb_post
+        UPDATE board_table
         SET
         modified_date = NOW()
         , title = #{boardTitle}
@@ -58,7 +58,7 @@
 
     <!-- 게시글 삭제 -->
     <delete id="deleteById" parameterType="long">
-        UPDATE tb_post
+        UPDATE board_table
         SET
         delete_yn = 1
         WHERE
@@ -67,17 +67,24 @@
 
 
     <!-- 게시글 리스트 조회 -->
-    <select id="findAll" resultType="com.studyproject.board.post.PostResponse">
+    <select id="findAll" parameterType="com.studyproject.board.dto.SearchDTO" resultType="com.studyproject.board.post.PostResponse">
         SELECT
         <include refid="postColumns" />
         FROM
-        tb_post
+        board_table
         WHERE
         delete_yn = 0
         ORDER BY
         id DESC
     </select>
 
-    <select id="count" resultType="java.lang.Integer"></select>
+    <select id="count" parameterType="com.studyproject.board.dto.SearchDTO" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        board_table
+        WHERE
+        delete_yn = 0
+    </select>
 
 </mapper>
