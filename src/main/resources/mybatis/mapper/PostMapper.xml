@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--sql 쿼리 선언 후, PostMapper를 통해 sql 쿼리 호출-->
+
+<!--인터페이스 Mapper의 경로 선언-->
+<mapper namespace="com.studyproject.board.post.PostMapper">
+
+    <!--sql, insert 태그 반복적인 쿼리 처리-->
+
+    <!-- tb_post 테이블 전체 컬럼 -->
+    <sql id="postColumns">
+        id
+        , boardWriter
+        , boardPass
+        , boardTitle
+        , boardContents
+    </sql>
+
+
+    <!-- 게시글 저장 -->
+    <insert id="save" parameterType="com.studyproject.board.post.PostRequest" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_post (
+        <include refid="postColumns" />
+        ) VALUES (
+        #{id}
+        , #{boardWriter}
+        , #{boardPass}
+        , #{boardTitle}
+        , #{boardContents}
+        )
+    </insert>
+
+
+    <!-- 게시글 상세정보 조회 -->
+    <select id="findById" parameterType="long" resultType="com.studyproject.board.post.PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM
+        tb_post
+        WHERE
+        id = #{value}
+    </select>
+
+
+    <!-- 게시글 수정 -->
+    <update id="update" parameterType="com.studyproject.board.post.PostRequest">
+        UPDATE tb_post
+        SET
+        modified_date = NOW()
+        , title = #{boardTitle}
+        , content = #{boardContents}
+        , writer = #{boardWriter}
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="long">
+        UPDATE tb_post
+        SET
+        delete_yn = 1
+        WHERE
+        id = #{id}
+    </delete>
+
+
+    <!-- 게시글 리스트 조회 -->
+    <select id="findAll" resultType="com.studyproject.board.post.PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM
+        tb_post
+        WHERE
+        delete_yn = 0
+        ORDER BY
+        id DESC
+    </select>
+
+    <select id="count" resultType="java.lang.Integer"></select>
+
+</mapper>

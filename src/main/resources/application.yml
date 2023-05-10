@@ -1,23 +1,29 @@
-#서버 포트 설정
+#properties와 동시에 사용하지 않도록 주의(나중에 로드되기 때문에 설정이 덮어씌여질 수 았음)
+#yml 작성 순서가 우선 순위의 영향을 받음
 
+#서버 포트 설정
 server :
   port : 8082
 
 # database 연동 설정
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password:
+      #타임리프 캐시를 설정함으로써 자동으로 지워지도록 설정
   thymeleaf:
     cache: false
 
-  # spring data jpa 설정
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    open-in-view: false
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+#mybatis 설정분
+mybatis:
+  configuration:
+    multiple-result-sets-enabled: false
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    jdbc-type-for-null: varchar
+    default-fetch-size: 500
+    #sql 쿼리를 작성하려는 파일이 있는 경로 지정
+    mapper-locations:
+      - classpath:/**/mapper/*Mapper.xml

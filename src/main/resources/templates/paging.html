@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>게시판 페이징 화면</title>
     <div id="title">
-        게시판 페이징 화면
+        게시판 화면
     </div>
     <style>
         /* 요소들의 너비 설정 */
@@ -24,14 +24,13 @@
 
 </head>
 <body>
-<button onclick="saveReq()">글작성</button>
 
 <table>
 
   <tr>
     <th class="w70">id</th>
     <th class="w300">제목</th>
-    <th class="w70">작성자</th>
+    <th class="w100">작성자</th>
     <th class="w300">작성일</th>
 
   </tr>
@@ -68,10 +67,5 @@
 <a th:href="@{/board/paging(page=${boardList.totalPages})}">Last</a>
 
 </body>
-<script>
-    const saveReq = () => {
-        location.href = "/board/save";
-    }
 
-</script>
 </html>
