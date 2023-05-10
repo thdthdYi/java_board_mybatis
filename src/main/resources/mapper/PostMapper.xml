@@ -11,10 +11,10 @@
     <!-- tb_post 테이블 전체 컬럼 -->
     <sql id="postColumns">
         id
-        , boardWriter
-        , boardPass
-        , boardTitle
-        , boardContents
+        , board_writer
+        , board_pass
+        , board_title
+        , board_contents
     </sql>
 
 
@@ -55,14 +55,14 @@
         id = #{id}
     </update>
 
-
     <!-- 게시글 삭제 -->
     <delete id="deleteById" parameterType="long">
-        UPDATE board_table
+        DELETE FROM board_table WHERE id = #{id}
+        <!--UPDATE board_table
         SET
         delete_yn = 1
         WHERE
-        id = #{id}
+        id = #{id}-->
     </delete>
 
 
@@ -72,8 +72,8 @@
         <include refid="postColumns" />
         FROM
         board_table
-        WHERE
-        delete_yn = 0
+        <!--WHERE
+        delete_yn = 0-->
         ORDER BY
         id DESC
     </select>
@@ -83,8 +83,8 @@
         COUNT(*)
         FROM
         board_table
-        WHERE
-        delete_yn = 0
+        <!--WHERE
+        delete_yn = 0-->
     </select>
 
 </mapper>

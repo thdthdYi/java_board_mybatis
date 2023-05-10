@@ -23,7 +23,7 @@ public class DatabaseConfig {
     private ApplicationContext context;
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public HikariConfig hikariConfig() {
         return new HikariConfig();
     }
@@ -33,13 +33,15 @@ public class DatabaseConfig {
         return new HikariDataSource(hikariConfig());
     }
 
+    /*
     @Bean //Mybatis 와 스프링의 연동 모듈
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+
         factoryBean.setDataSource(dataSource());
-		factoryBean.setMapperLocations(context.getResources("classpath:/**/mapper/*Mapper.xml"));
+		factoryBean.setMapperLocations(context.getResources("classpath:/mapper/*Mapper.xml"));
         return factoryBean.getObject();
-    }
+    }*/
 
     @Bean
     public SqlSessionTemplate sqlSession() throws Exception {
@@ -51,6 +53,17 @@ public class DatabaseConfig {
     public org.apache.ibatis.session.Configuration mybatisConfig() {
         return new org.apache.ibatis.session.Configuration();
     }
+
+    @Bean(name = "abc")
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setDataSource(dataSource());
+        factoryBean.setMapperLocations(context.getResources("classpath:/mapper/*Mapper.xml"));
+        factoryBean.setConfiguration(mybatisConfig());
+        return factoryBean.getObject();
+    }
+
+
 
 
 }

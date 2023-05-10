@@ -21,33 +21,19 @@
 <th:block layout:fragment="script">
 
     <!--자바 스크립트 내에서 타임리프 문법 사용-->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-
-            window.onload = () => {
-                initCreatedDate();
-            }
-
-
-            // 등록일 초기화
-            function initCreatedDate() {
-                document.getElementById('createdDate').value = dayjs().format('YYYY-MM-DD');
-            }
-
+    <script th:inline="javascript" >
 
             // 게시글 저장(수정)
             function savePost() {
                 const form = document.getElementById('saveForm');
-                const fields = [form.title, form.writer, form.content];
+                const fields = [form.boardTitle, form.boardWriter, form.boardContents];
                 const fieldNames = ['제목', '이름', '내용'];
 
                 for (let i = 0, len = fields.length; i < len; i++) {
                     isValid(fields[i], fieldNames[i]);
                 }
 
-                document.getElementById('saveBtn').disabled = true;
-                form.noticeYn.value = form.isNotice.checked;
-                form.action = [[ ${post == null} ]] ? '/board/save' : '/board/update';
+                form.action = [[ ${post != null} ]] ? '/board/page' : '';
                 form.submit();
             }
 

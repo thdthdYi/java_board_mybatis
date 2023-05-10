@@ -8,10 +8,11 @@ server :
 # database 연동 설정
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      username: root
+      password:
       #타임리프 캐시를 설정함으로써 자동으로 지워지도록 설정
   thymeleaf:
     cache: false
@@ -20,10 +21,10 @@ spring:
 mybatis:
   configuration:
     multiple-result-sets-enabled: false
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: false
     call-setters-on-nulls: true
     jdbc-type-for-null: varchar
     default-fetch-size: 500
     #sql 쿼리를 작성하려는 파일이 있는 경로 지정
     mapper-locations:
-      - classpath:/**/mapper/*Mapper.xml
+      - classpath:/mapper/*Mapper.xml

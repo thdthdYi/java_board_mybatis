@@ -28,17 +28,19 @@ public class PostController {
         return "save";
     }
 
+
     @PostMapping("/board")
     public String savePost(final PostRequest params) {
         postService.savePost(params);
         return "paging";
     }
 
+    /*
     @GetMapping("/board/page")
     public String openPostList(@ModelAttribute("params") final SearchDTO params, Model model) {
-        List<PostResponse> posts = postService.findAllPost(params);
-        model.addAttribute("posts", posts);
+        List<PostResponse> responses = postService.findAllPost(params);
+        model.addAttribute("response", responses);
         return "paging";
-    }
+    }*/
 
 }

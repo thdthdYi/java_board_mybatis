@@ -15,6 +15,7 @@ public interface PostMapper {
      * 게시글 저장
      * @param params - 게시글 정보
      */
+    //INSERT 쿼리 호출 부분 params에 저장할 게시글이 담김
     void save(PostRequest params);
 
     /**
@@ -40,7 +41,7 @@ public interface PostMapper {
      * 게시글 리스트 조회
      * @return 게시글 리스트
      */
-    List<PostResponse> findAll(SearchDTO params);
+    List<PostResponse> findAll();
 
     /**
      * 게시글 수 카운팅
