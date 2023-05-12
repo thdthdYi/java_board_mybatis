@@ -8,20 +8,46 @@
 </head>
 <body>
 <!--action속성: 목적지(서버주소), method속성: http request method(get, post)-->
-<form action="/board/page" method="post" enctype="multipart/form-data">
-  writer: <input type="text" name="boardWriter"> <br>
-  pass: <input type="text" name="boardPass"> <br>
-  title: <input type="text" name="boardTitle"> <br>
-  contents: <textarea name="boardContents" cols="30" rows="10"></textarea> <br>
+<!--사용자가 입력한 name값을 action에 지정한 url로 전달-->
+<form id="saveForm" method="post" enctype="multipart/form-data">
+    writer: <input type="text" name="boardWriter"> <br>
+    pass: <input type="text" name="boardPass"> <br>
+    title: <input type="text" name="boardTitle"> <br>
+    contents: <textarea name="boardContents" cols="30" rows="10"></textarea> <br>
+    <input type="hidden" name="boardCreatedTime" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}" />
+    <button onclick="savePost()">저장</button>
 </form>
-<button type="button"  onclick="savePost();" >저장</button>
-<a th:href="@{/board/page}">뒤로</a>
+
+<a th:href="@{/board/list}">뒤로</a>
 </body>
 
 <th:block layout:fragment="script">
 
     <!--자바 스크립트 내에서 타임리프 문법 사용-->
     <script th:inline="javascript" >
+
+    window.onload = () => {
+        renderPostInfo();
+    }
+
+
+    // 게시글 상세정보 렌더링
+    function renderPostInfo() {
+        const boardList = [[${boardList}]];
+
+        if ( !boardList ) {
+            initCreatedDate();
+            return false;
+        }
+
+        const form = document.getElementById('saveForm');
+        const fields = ['id', 'boardWriter','boardTitle', 'boardContents'];
+
+        fields.forEach(field => {
+            form[field].value = boardList.id[field];
+        })
+    }
+
 
             // 게시글 저장(수정)
             function savePost() {
@@ -33,11 +59,14 @@
                     isValid(fields[i], fieldNames[i]);
                 }
 
-                form.action = [[ ${post != null} ]] ? '/board/page' : '';
+                form.action = [[ ${boardList == null} ]] ? '/board/list' : '/board/update';
                 form.submit();
             }
 
         /*]]>*/
         </script>
+
 </th:block>
+
+
 </html>

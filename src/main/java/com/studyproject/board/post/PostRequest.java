@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class PostRequest {
 
+
     private Long id;
     private String boardWriter;
     private String boardPass; //null 가능

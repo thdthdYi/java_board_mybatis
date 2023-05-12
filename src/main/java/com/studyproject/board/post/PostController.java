@@ -1,10 +1,10 @@
 package com.studyproject.board.post;
-import com.studyproject.board.dto.SearchDTO;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,7 +23,7 @@ public class PostController {
     public String openPostWrite(@RequestParam(value = "id", required = false) final Long id, Model model) {
         if (id != null) {
             PostResponse post = postService.findPostById(id);
-            model.addAttribute("post", post);
+            model.addAttribute("boardList", post);
         }
         return "save";
     }
@@ -32,15 +32,38 @@ public class PostController {
     @PostMapping("/board")
     public String savePost(final PostRequest params) {
         postService.savePost(params);
-        return "paging";
+        return "redirect:paging";
     }
 
-    /*
-    @GetMapping("/board/page")
-    public String openPostList(@ModelAttribute("params") final SearchDTO params, Model model) {
-        List<PostResponse> responses = postService.findAllPost(params);
-        model.addAttribute("response", responses);
-        return "paging";
-    }*/
+    // 게시글 리스트 페이지
+    @GetMapping("/board/list")
+    public String openPostList(Model model) {
+        List<PostResponse> posts = postService.findAllPost();
+        model.addAttribute("boardList", posts);
+        return "list";
+    }
+
+    //게시글 클릭 시 상세 내용 조회 페이지로 이동
+    @GetMapping("/board/{id}")
+    public String openPostView(@PathVariable final Long id, Model model) {
+        PostResponse post = postService.findPostById(id);
+        model.addAttribute("board", post);
+        return "detail";
+    }
+
+    // 기존 게시글 수정 후 이동 페이지
+    @PostMapping("/board/update")
+    public String updatePost(final PostRequest params) {
+        postService.updatePost(params);
+        return "redirect:/board/" + params.getId();
+    }
+
+    //기존 게시글 정보를 조회하여 update.html에 던져줌
+    @GetMapping("/board/update?id={id}")
+    public String openPostUpdate(@RequestParam(value = "id", required = true) final Long id, Model model) {
+        PostResponse post = postService.findPostById(id);
+        model.addAttribute("boardUpdate", post);
+        return "update";
+    }
 
 }

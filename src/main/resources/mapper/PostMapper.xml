@@ -6,9 +6,7 @@
 <!--인터페이스 Mapper의 경로 선언-->
 <mapper namespace="com.studyproject.board.post.PostMapper">
 
-    <!--sql, insert 태그 반복적인 쿼리 처리-->
-
-    <!-- tb_post 테이블 전체 컬럼 -->
+    <!-- db_table 테이블 전체 컬럼 -->
     <sql id="postColumns">
         id
         , board_writer
@@ -17,74 +15,66 @@
         , board_contents
     </sql>
 
-
     <!-- 게시글 저장 -->
-    <insert id="save" parameterType="com.studyproject.board.post.PostRequest" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.studyproject.board.post.PostRequest">
         INSERT INTO board_table (
-        <include refid="postColumns" />
-        ) VALUES (
-        #{id}
-        , #{boardWriter}
-        , #{boardPass}
-        , #{boardTitle}
-        , #{boardContents}
-        )
+        board_contents,
+        board_pass,
+        board_title,
+        board_writer,
+        created_time)
+
+        VALUES (
+        #{boardContents},
+        #{boardPass},
+        #{boardTitle},
+        #{boardWriter},
+        NOW())
     </insert>
 
 
     <!-- 게시글 상세정보 조회 -->
-    <select id="findById" parameterType="long" resultType="com.studyproject.board.post.PostResponse">
+    <select id="findById" parameterType="java.lang.Long" resultType="com.studyproject.board.post.PostResponse">
         SELECT
-        <include refid="postColumns" />
-        FROM
-        board_table
-        WHERE
-        id = #{value}
+        <include refid="postColumns" />,
+        created_time,
+        updated_time,
+        hits
+        FROM board_table
+        WHERE id = #{id}
     </select>
-
 
     <!-- 게시글 수정 -->
     <update id="update" parameterType="com.studyproject.board.post.PostRequest">
-        UPDATE board_table
-        SET
-        modified_date = NOW()
-        , title = #{boardTitle}
-        , content = #{boardContents}
-        , writer = #{boardWriter}
-        WHERE
-        id = #{id}
+        UPDATE board_table SET
+        created_time = #{createdTime},
+        updated_time = #{updatedTime},
+        hits = #{hits},
+        board_contents = #{boardContents},
+        board_pass = #{boardPass},
+        board_title = #{boardTitle},
+        board_writer = #{boardWriter}
+        WHERE id = #{id}
     </update>
 
     <!-- 게시글 삭제 -->
-    <delete id="deleteById" parameterType="long">
-        DELETE FROM board_table WHERE id = #{id}
-        <!--UPDATE board_table
-        SET
-        delete_yn = 1
-        WHERE
-        id = #{id}-->
-    </delete>
+    <select id="deleteById" resultType="com.studyproject.board.post.PostResponse">
+        SELECT * FROM board_table
+    </select>
 
 
     <!-- 게시글 리스트 조회 -->
-    <select id="findAll" parameterType="com.studyproject.board.dto.SearchDTO" resultType="com.studyproject.board.post.PostResponse">
+    <select id="findAll" resultType="com.studyproject.board.post.PostResponse">
         SELECT
-        <include refid="postColumns" />
-        FROM
-        board_table
-        <!--WHERE
-        delete_yn = 0-->
-        ORDER BY
-        id DESC
+        <include refid="postColumns" />,
+        created_time,
+        updated_time,
+        hits
+        FROM board_table
     </select>
 
     <select id="count" parameterType="com.studyproject.board.dto.SearchDTO" resultType="java.lang.Integer">
-        SELECT
-        COUNT(*)
-        FROM
-        board_table
-        <!--WHERE
-        delete_yn = 0-->
+        SELECT COUNT(*) FROM board_table
     </select>
 
 </mapper>

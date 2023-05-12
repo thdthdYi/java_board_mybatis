@@ -6,6 +6,7 @@
 </head>
 <body>
 <form action="/board/update" method="post" name="updateForm">
+
   <!--hidden 보여주진않아도 필요한 정보 -->
   <input type="hidden" name="id" th:value="${boardUpdate.id}">
   writer: <input type="text" name="boardWriter" th:value="${boardUpdate.boardWriter}" readonly> <br>
@@ -20,8 +21,12 @@
     const pass = [[${boardUpdate.boardPass}]];
     const inputPass = document.getElementById("boardPass").value;
 
+    if (pass !== inputPass) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return;
+    }
+
       document.updateForm.submit();
-에
   }
 </script>
 </body>
