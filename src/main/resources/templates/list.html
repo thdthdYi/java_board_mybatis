@@ -17,9 +17,19 @@
         <td th:text="${board.id}"></td>
         <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}"></a></td>
         <td th:text="${board.boardWriter}"></td>
+        <td th:text="${board.createdTime}"></td>
         <!--<td th:text="${board.boardHits}"></td> -->
     </tr>
     </table>
+<button onclick="indexReq();">뒤로</button>
+
+
 
 </body>
+
+<script>
+    const indexReq = () => {
+location.href="/";
+}
+</script>
 </html>

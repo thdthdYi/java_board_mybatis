@@ -38,8 +38,6 @@
         SELECT
         <include refid="postColumns" />,
         created_time,
-        updated_time,
-        hits
         FROM board_table
         WHERE id = #{id}
     </select>
@@ -47,9 +45,6 @@
     <!-- 게시글 수정 -->
     <update id="update" parameterType="com.studyproject.board.post.PostRequest">
         UPDATE board_table SET
-        created_time = #{createdTime},
-        updated_time = #{updatedTime},
-        hits = #{hits},
         board_contents = #{boardContents},
         board_pass = #{boardPass},
         board_title = #{boardTitle},
@@ -58,9 +53,10 @@
     </update>
 
     <!-- 게시글 삭제 -->
-    <select id="deleteById" resultType="com.studyproject.board.post.PostResponse">
-        SELECT * FROM board_table
-    </select>
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM board_table
+        WHERE id = #{id}
+    </delete>
 
 
     <!-- 게시글 리스트 조회 -->
@@ -68,8 +64,6 @@
         SELECT
         <include refid="postColumns" />,
         created_time,
-        updated_time,
-        hits
         FROM board_table
     </select>
 

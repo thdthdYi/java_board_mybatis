@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>detail</title>
+    <meta charset="UTF-8">
+    <title>detail</title>
 </head>
 <body>
 
 <table>
-  <tr>
-    <th>id</th>
+    <tr>
+        <th>id</th>
 
-    <td th:text="${board.id}"></td>
-  </tr>
-  <tr>
-    <th>title</th>
-    <td th:text="${board.boardTitle}"></td>
-  </tr>
-  <tr>
-    <th>writer</th>
-    <td th:text="${board.boardWriter}"></td>
-  </tr>
-  <tr>
-    <th>content</th>
-    <td th:text="${board.boardContents}"></td>
-  </tr>
-  </table>
-<button onclick="updateReq()">수정</button>
-<button>삭제</button>
-<button onclick="listReq()">뒤로</button>
+        <td th:text="${board.id}"></td>
+    </tr>
+    <tr>
+        <th>title</th>
+        <td th:text="${board.boardTitle}"></td>
+    </tr>
+    <tr>
+        <th>writer</th>
+        <td th:text="${board.boardWriter}"></td>
+    </tr>
+    <tr>
+        <th>content</th>
+        <td th:text="${board.boardContents}"></td>
+    </tr>
+</table>
+<button onclick="updateReq();">수정</button>
+<button onclick="deletePost();">삭제</button>
+<button onclick="listReq();">뒤로</button>
 </body>
 <script>
 
@@ -36,9 +36,22 @@
         }
 
    const updateReq = () =>{
-    const boardId = [[${board.id}]]; // 게시글의 id값을 가져옵니다.
-    location.href = "/board/update?id=" + boardId;
+    const boardId = [[${board.id}]]; // 게시글의 id값 가져오기
+    location.href = `/board/update?id=${boardId}`; //쿼리스트링
    }
 
-</script>>
+   // 게시글 삭제
+     function deletePost() {
+
+     const boardId = [[${board.id}]];
+
+
+      if ( !confirm(boardId + '번 게시글을 삭제할까요?') ) {
+                    return false;
+                }
+
+        location.href = `/board/delete?id=${boardId}`; //쿼리스트링
+            }
+
+</script>
 </html>

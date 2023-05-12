@@ -28,11 +28,10 @@ public class PostController {
         return "save";
     }
 
-
     @PostMapping("/board")
     public String savePost(final PostRequest params) {
         postService.savePost(params);
-        return "redirect:paging";
+        return "redirect:board/list";
     }
 
     // 게시글 리스트 페이지
@@ -55,15 +54,23 @@ public class PostController {
     @PostMapping("/board/update")
     public String updatePost(final PostRequest params) {
         postService.updatePost(params);
-        return "redirect:/board/" + params.getId();
+
+        return "redirect:/board/list";
     }
 
     //기존 게시글 정보를 조회하여 update.html에 던져줌
-    @GetMapping("/board/update?id={id}")
-    public String openPostUpdate(@RequestParam(value = "id", required = true) final Long id, Model model) {
+    @GetMapping("/board/update")
+    public String openPostUpdate(@RequestParam("id") Long id, Model model) {
         PostResponse post = postService.findPostById(id);
         model.addAttribute("boardUpdate", post);
         return "update";
     }
+
+    @GetMapping("/board/delete")
+    public String deletePost(@RequestParam final Long id) {
+        postService.deletePost(id);
+        return "redirect:/board/list";
+    }
+
 
 }

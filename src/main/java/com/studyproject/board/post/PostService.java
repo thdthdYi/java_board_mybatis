@@ -42,4 +42,10 @@ public class PostService {
         return params.getId();
     }
 
+    public Long deletePost(final Long id) {
+        postMapper.deleteById(id);
+        return id;
+    }
+
+
 }
