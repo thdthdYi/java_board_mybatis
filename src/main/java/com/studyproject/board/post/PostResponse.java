@@ -14,5 +14,5 @@ public class PostResponse {
     private String boardPass; //null 가능
     private String boardTitle;
     private String boardContents;
-    private LocalDateTime createdTime;
+    private String createdTime;
 }

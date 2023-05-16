@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-//PostMapper.xml(db에 접근해서 호출할 sql쿼리를 선언)와 함께 db와 통신출
+//PostMapper.xml(db에 접근해서 호출할 sql쿼리를 선언)와 함께 db와 통신
 //PostMapper.xml의 id와 메서드명이 동일해야함.
 
 @Mapper
@@ -47,6 +47,9 @@ public interface PostMapper {
      * 게시글 수 카운팅
      * @return 게시글 수
      */
+
+    //SearchDTO 안의 파라미터를 전달받음
+    List<PostResponse> findPageAll(SearchDTO params);
 
     int count(SearchDTO params);
 

@@ -13,6 +13,7 @@
         , board_pass
         , board_title
         , board_contents
+        , created_time
     </sql>
 
     <!-- 게시글 저장 -->
@@ -35,10 +36,7 @@
 
     <!-- 게시글 상세정보 조회 -->
     <select id="findById" parameterType="java.lang.Long" resultType="com.studyproject.board.post.PostResponse">
-        SELECT
-        <include refid="postColumns" />,
-        created_time,
-        FROM board_table
+        SELECT * FROM board_table
         WHERE id = #{id}
     </select>
 
@@ -61,10 +59,14 @@
 
     <!-- 게시글 리스트 조회 -->
     <select id="findAll" resultType="com.studyproject.board.post.PostResponse">
-        SELECT
-        <include refid="postColumns" />,
-        created_time,
-        FROM board_table
+        SELECT * FROM board_table
+    </select>
+
+    <!--페이지네이션 쿼리 작성 / -->
+    <select id="findPageAll" parameterType="com.studyproject.board.dto.SearchDTO" resultType="com.studyproject.board.post.PostResponse">
+        SELECT * FROM board_table
+        ORDER BY created_time DESC
+        LIMIT #{pageLimit}, #{recordSize}
     </select>
 
     <select id="count" parameterType="com.studyproject.board.dto.SearchDTO" resultType="java.lang.Integer">

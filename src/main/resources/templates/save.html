@@ -14,7 +14,7 @@
     pass: <input type="text" name="boardPass"> <br>
     title: <input type="text" name="boardTitle"> <br>
     contents: <textarea name="boardContents" cols="30" rows="10"></textarea> <br>
-    <input type="hidden" name="createdTime" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}" />
+    <input type="hidden" name="createdTime" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss')}" />
     <button onclick="savePost()">저장</button>
     <button onclick="listReq(event);">글목록</button>
 </form>
@@ -26,6 +26,8 @@
     <!--자바 스크립트 내에서 타임리프 문법 사용-->
     <script th:inline="javascript" >
 
+    //페이지가 로딩되는 시점에 단 한번만 실행되는 코드.
+    //상제 페이지는 접속했을 때 한번만 보여주면 되기 때문에 해당 이벤트를 이용하여 작성.
     window.onload = () => {
         renderPostInfo();
     }
@@ -34,6 +36,7 @@
     function renderPostInfo() {
         const boardList = [[${boardList}]];
 
+        //saveForm에서 fields에 선언한 필드를 찾아 정보를 렌더링
         const form = document.getElementById('saveForm');
         const fields = ['id', 'boardWriter','boardTitle', 'boardContents'];
 
@@ -45,8 +48,8 @@
             // 게시글 저장(수정)
             function savePost() {
                 const form = document.getElementById('saveForm');
-                const fields = [form.boardTitle, form.boardWriter, form.boardContents];
-                const fieldNames = ['제목', '이름', '내용'];
+                const fields = [form.boardTitle, form.boardWriter, form.boardContents, form.createdTime];
+                const fieldNames = ['제목', '이름', '내용', '날짜'];
 
                 for (let i = 0, len = fields.length; i < len; i++) {
                     isValid(fields[i], fieldNames[i]);

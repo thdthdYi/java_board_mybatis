@@ -1,12 +1,10 @@
 package com.studyproject.board.post;
 
+import com.studyproject.board.dto.SearchDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +40,7 @@ public class PostController {
         return "list";
     }
 
+
     //게시글 클릭 시 상세 내용 조회 페이지로 이동
     @GetMapping("/board/{id}")
     public String openPostView(@PathVariable final Long id, Model model) {
@@ -72,5 +71,46 @@ public class PostController {
         return "redirect:/board/list";
     }
 
+    // 페이지네이션
+    @GetMapping("/board/paging")    //paging을 위한 url 호출
+    public String openPageList(
+            @RequestParam(value = "page", required = false) String page,
+            @ModelAttribute("params") final SearchDTO params, Model model) {
+
+        if (page != null) {
+            params.setPage(Integer.parseInt(page));
+        }
+
+        //@ModelAttribute 를 활용하여 해당 파라미터로 수집한 정보를 html로 전달
+        List<PostResponse> posts = postService.findPagePost(params);
+
+        int getPageCount = postService.getCount(params);
+        int totalPageCount = (getPageCount - 1) / params.getRecordSize() + 1;
+        int currentPage = params.getPage();
+        int blockLimit = 5;
+
+        int startPage = ((currentPage - 1) / blockLimit) * blockLimit + 1;
+        int endPage = Math.min(startPage + blockLimit - 1, totalPageCount);
+
+        // 한 페이지에 표시할 게시글 수 (예시로 5개로 설정)
+        int itemsPerPage = 5;
+
+        // 현재 페이지에 해당하는 게시글의 시작 인덱스와 끝 인덱스 계산
+        int startIndex = (currentPage - 1) * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, posts.size());
+
+        // 한 페이지에 표시할 게시글 목록 추출
+        List<PostResponse> responses = posts.subList(startIndex, endIndex);
+
+        //service에서 로직 처리를 위한 파라미터 전달
+        model.addAttribute("boardList", posts);
+        model.addAttribute("responses", responses);
+
+        model.addAttribute("getPageCount", getPageCount);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);//html에 데이터 전달
+        return "paging"; //전달받을 html
+    }
 
 }
